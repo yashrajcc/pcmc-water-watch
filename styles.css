@@ -1,0 +1,696 @@
+:root {
+  --ink: #14323f;
+  --muted: #4a6672;
+  --paper: #f3f7f8;
+  --paper-2: #e7f0f3;
+  --line: #c5d6dd;
+  --accent: #0b6e7a;
+  --zone-A: #0f766e;
+  --zone-B: #0369a1;
+  --zone-C: #1d4ed8;
+  --zone-D: #0e7490;
+  --zone-E: #4338ca;
+  --zone-F: #155e75;
+  --shadow: 0 18px 50px rgba(20, 50, 63, 0.12);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Figtree", system-ui, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #d7eef3 0%, transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, #dce8f5 0%, transparent 50%),
+    linear-gradient(180deg, var(--paper) 0%, var(--paper-2) 100%);
+}
+
+.page {
+  width: min(1120px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.25rem 0 3rem;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.nav__brand {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.nav__links a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.nav__links a:hover {
+  color: var(--accent);
+}
+
+.nav__dot {
+  color: var(--line);
+}
+
+.header {
+  max-width: 40rem;
+  margin-bottom: 1.75rem;
+}
+
+h1 {
+  margin: 0 0 0.55rem;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.lede {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.info-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0 0 2rem;
+}
+
+.info-card {
+  padding: 1.1rem 1.15rem 1.15rem;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.info-card h2 {
+  margin: 0 0 0.5rem;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+.info-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 200px;
+  gap: 1.25rem 1.5rem;
+  align-items: start;
+}
+
+.map-frame {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+#map {
+  width: 100%;
+  height: min(68vh, 640px);
+  min-height: 420px;
+  background: #e8eef2;
+}
+
+.leaflet-container {
+  font: inherit;
+}
+
+.map-idle {
+  position: absolute;
+  left: 12px;
+  bottom: 28px;
+  z-index: 500;
+  margin: 0;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--muted);
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+/* —— Hover water overlay —— */
+.ward-card {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 600;
+  width: min(320px, calc(100% - 24px));
+  padding: 1rem 1.05rem 0.9rem;
+  border: 1px solid rgba(20, 50, 63, 0.14);
+  background:
+    linear-gradient(165deg, rgba(255, 255, 255, 0.97) 0%, rgba(240, 248, 250, 0.95) 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 16px 40px rgba(20, 50, 63, 0.18);
+  pointer-events: none;
+  animation: card-in 160ms ease-out;
+}
+
+.ward-card[hidden] {
+  display: none;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ward-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.ward-card__eyebrow {
+  margin: 0 0 0.15rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.ward-card__title {
+  margin: 0;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.ward-card__locality {
+  margin: 0.2rem 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.status-pill {
+  flex: none;
+  padding: 0.28rem 0.55rem;
+  border: 1px solid transparent;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.status-pill[data-status="adequate"] {
+  color: #0f5132;
+  background: #d1e7dd;
+  border-color: #a3cfbb;
+}
+
+.status-pill[data-status="stressed"] {
+  color: #664d03;
+  background: #fff3cd;
+  border-color: #ffecb5;
+}
+
+.status-pill[data-status="deficit"] {
+  color: #842029;
+  background: #f8d7da;
+  border-color: #f1aeb5;
+}
+
+.status-pill[data-status="nodata"] {
+  color: #4a5560;
+  background: #e8ecee;
+  border-color: #c5ced3;
+}
+
+.ward-card__empty {
+  padding-top: 0.15rem;
+}
+
+.empty-title {
+  margin: 0 0 0.4rem;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+.empty-copy {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.coverage-legend {
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.coverage-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.swatch-data {
+  background: #0b6e7a;
+}
+
+.swatch-nodata {
+  background: #b7c4ca;
+}
+
+.sidebar__sub {
+  margin-top: 0.25rem;
+}
+
+.ward-card__hero {
+  margin-bottom: 0.9rem;
+  padding: 0.75rem 0.8rem;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.hero-metric {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  margin-bottom: 0.45rem;
+}
+
+.hero-metric__value {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.hero-metric__label {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.supply-track {
+  height: 6px;
+  margin-bottom: 0.45rem;
+  background: #d7e4ea;
+  overflow: hidden;
+}
+
+.supply-track__fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #0b6e7a, #1d9aaa);
+  transition: width 180ms ease;
+}
+
+.ward-card__schedule {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.86rem;
+  font-weight: 500;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem 0.75rem;
+  margin: 0 0 0.85rem;
+}
+
+.metric {
+  margin: 0;
+}
+
+.metric dt {
+  margin: 0 0 0.2rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.metric dd {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.meter {
+  height: 4px;
+  margin-top: 0.35rem;
+  background: #d7e4ea;
+  overflow: hidden;
+}
+
+.meter__fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: #0369a1;
+  transition: width 180ms ease;
+}
+
+.ward-card__source {
+  margin-bottom: 0.7rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--line);
+}
+
+.source-label {
+  margin: 0 0 0.2rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.source-value {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.ward-card__notes {
+  margin: 0 0 0.55rem;
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.ward-card__updated {
+  margin: 0;
+  color: #7a929c;
+  font-size: 0.75rem;
+}
+
+.hint code {
+  font-size: 0.84em;
+  padding: 0.1em 0.3em;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--line);
+}
+
+.sidebar h2 {
+  margin: 0 0 0.75rem;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+.legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.zone-chip {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.75);
+  color: inherit;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+}
+
+.zone-chip:hover,
+.zone-chip[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: #fff;
+}
+
+.zone-chip.clear {
+  justify-content: center;
+  margin-top: 0.35rem;
+  color: var(--muted);
+}
+
+.swatch {
+  width: 0.85rem;
+  height: 0.85rem;
+  flex: none;
+}
+
+.swatch.zone-A { background: var(--zone-A); }
+.swatch.zone-B { background: var(--zone-B); }
+.swatch.zone-C { background: var(--zone-C); }
+.swatch.zone-D { background: var(--zone-D); }
+.swatch.zone-E { background: var(--zone-E); }
+.swatch.zone-F { background: var(--zone-F); }
+
+.count {
+  margin-left: auto;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9rem;
+}
+
+.hint {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.slum-section {
+  margin-top: 2rem;
+}
+
+.slum-card {
+  padding: 1.35rem 1.4rem 1.5rem;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.slum-card h2 {
+  margin: 0 0 0.75rem;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: clamp(1.35rem, 2.5vw, 1.65rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.slum-card > p {
+  margin: 0 0 0.85rem;
+  max-width: 46rem;
+  color: var(--muted);
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+.slum-card > p strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.slum-card__doc {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1rem;
+  margin-bottom: 1.15rem !important;
+}
+
+.slum-card__doc a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.slum-card__doc a:hover {
+  text-decoration: underline;
+}
+
+.slum-card__note {
+  color: #7a929c;
+  font-size: 0.82rem;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  background: #fff;
+  -webkit-overflow-scrolling: touch;
+}
+
+.data-table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.data-table th {
+  position: sticky;
+  top: 0;
+  background: #eef4f6;
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.data-table tbody tr:nth-child(even) {
+  background: #f7fafb;
+}
+
+.data-table tbody tr:hover {
+  background: #eef6f8;
+}
+
+.data-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.data-table td:first-child {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.footer {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.footer p {
+  margin: 0 0 0.4rem;
+}
+
+.footer p:last-child {
+  margin-bottom: 0;
+}
+
+.footer a {
+  color: var(--accent);
+}
+
+@media (max-width: 800px) {
+  .nav {
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+  }
+
+  .info-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .main {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    order: -1;
+  }
+
+  .legend {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .zone-chip.clear {
+    grid-column: 1 / -1;
+  }
+
+  #map {
+    min-height: 360px;
+    height: 55vh;
+  }
+
+  .ward-card {
+    top: auto;
+    bottom: 12px;
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-height: 48%;
+    overflow: auto;
+  }
+
+  .map-idle {
+    bottom: auto;
+    top: 12px;
+    left: 12px;
+  }
+}

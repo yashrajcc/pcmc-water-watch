@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PCMC Water Watch · Who gets water in Pimpri-Chinchwad?</title>
+  <meta name="description" content="A ward-level look at drinking-water supply in Pimpri-Chinchwad, built from RTI replies." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin="" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page">
+    <nav class="nav" aria-label="Primary">
+      <a class="nav__brand" href="#">PCMC Water Watch</a>
+      <div class="nav__links">
+        <a href="#about">About</a>
+        <span class="nav__dot" aria-hidden="true">·</span>
+        <a href="https://rtionline.gov.in/" rel="noopener" target="_blank">File your own RTI</a>
+      </div>
+    </nav>
+
+    <header class="header">
+      <h1>Who gets water in Pimpri-Chinchwad?</h1>
+      <p class="lede">A ward-level look at drinking-water supply, built from RTI replies.</p>
+    </header>
+
+    <section class="info-cards" id="about" aria-label="About this project">
+      <article class="info-card">
+        <h2>Why we made this</h2>
+        <p>
+          Some parts of the city get more water than others. We wanted to know why — so we asked the
+          government directly under RTI. This map shows what they told us.
+        </p>
+      </article>
+      <article class="info-card">
+        <h2>What the colours mean</h2>
+        <p>
+          Coloured area = we have the answer.<br />
+          Grey area = still waiting for a reply.<br />
+          Nothing is hidden — some areas just haven't answered yet.
+        </p>
+      </article>
+      <article class="info-card">
+        <h2>How to use this map</h2>
+        <p>
+          Tap or hover any coloured area to see its water hours, coverage, and where the water comes from.
+        </p>
+      </article>
+    </section>
+
+    <main class="main">
+      <figure class="map-frame">
+        <div id="map" role="application" aria-label="PCMC ward map showing water data coverage"></div>
+
+        <aside class="ward-card" id="ward-card" hidden aria-live="polite">
+          <div class="ward-card__top">
+            <div>
+              <p class="ward-card__eyebrow" id="card-eyebrow">Zone —</p>
+              <h2 class="ward-card__title" id="card-title">Ward —</h2>
+              <p class="ward-card__locality" id="card-locality">—</p>
+            </div>
+            <span class="status-pill" id="card-status" data-status="">—</span>
+          </div>
+
+          <div class="ward-card__body" id="card-body">
+            <div class="ward-card__hero">
+              <div class="hero-metric">
+                <span class="hero-metric__value" id="card-hours">—</span>
+                <span class="hero-metric__label">hrs / day supply</span>
+              </div>
+              <div class="supply-track" aria-hidden="true">
+                <div class="supply-track__fill" id="card-hours-bar"></div>
+              </div>
+              <p class="ward-card__schedule" id="card-schedule">—</p>
+            </div>
+
+            <dl class="metric-grid">
+              <div class="metric">
+                <dt>Network coverage</dt>
+                <dd>
+                  <span id="card-coverage">—</span>
+                  <div class="meter" aria-hidden="true"><span class="meter__fill" id="card-coverage-bar"></span></div>
+                </dd>
+              </div>
+              <div class="metric">
+                <dt>Household connections</dt>
+                <dd id="card-connections">—</dd>
+              </div>
+              <div class="metric">
+                <dt>ESR capacity</dt>
+                <dd id="card-esr">—</dd>
+              </div>
+              <div class="metric">
+                <dt>System pressure</dt>
+                <dd id="card-pressure">—</dd>
+              </div>
+            </dl>
+
+            <div class="ward-card__source">
+              <p class="source-label">Primary source</p>
+              <p class="source-value" id="card-source">—</p>
+            </div>
+
+            <p class="ward-card__notes" id="card-notes">—</p>
+            <p class="ward-card__updated">RTI / records updated <time id="card-updated">—</time></p>
+          </div>
+
+          <div class="ward-card__empty" id="card-empty" hidden>
+            <p class="empty-title">No published supply data yet</p>
+            <p class="empty-copy">
+              This ward is still grey because the RTI tranche has not returned usable
+              provisioning figures. It will light up when that disclosure is added.
+            </p>
+          </div>
+        </aside>
+
+        <p class="map-idle" id="map-idle">Hover a ward — coloured ones have RTI data</p>
+      </figure>
+
+      <aside class="sidebar">
+        <h2>On the map</h2>
+        <ul class="coverage-legend">
+          <li><span class="swatch swatch-data" aria-hidden="true"></span> Data published <span class="count" id="legend-with-data">13</span></li>
+          <li><span class="swatch swatch-nodata" aria-hidden="true"></span> Awaiting RTI <span class="count" id="legend-nodata">53</span></li>
+        </ul>
+
+        <h2 class="sidebar__sub">Filter by zone</h2>
+        <ul class="legend" id="legend">
+          <li><button type="button" class="zone-chip" data-zone="A" aria-pressed="false"><span class="swatch zone-A" aria-hidden="true"></span>Zone A<span class="count">11</span></button></li>
+          <li><button type="button" class="zone-chip" data-zone="B" aria-pressed="false"><span class="swatch zone-B" aria-hidden="true"></span>Zone B<span class="count">11</span></button></li>
+          <li><button type="button" class="zone-chip" data-zone="C" aria-pressed="false"><span class="swatch zone-C" aria-hidden="true"></span>Zone C<span class="count">14</span></button></li>
+          <li><button type="button" class="zone-chip" data-zone="D" aria-pressed="false"><span class="swatch zone-D" aria-hidden="true"></span>Zone D<span class="count">10</span></button></li>
+          <li><button type="button" class="zone-chip" data-zone="E" aria-pressed="false"><span class="swatch zone-E" aria-hidden="true"></span>Zone E<span class="count">10</span></button></li>
+          <li><button type="button" class="zone-chip" data-zone="F" aria-pressed="false"><span class="swatch zone-F" aria-hidden="true"></span>Zone F<span class="count">10</span></button></li>
+          <li><button type="button" class="zone-chip clear" data-zone="" aria-pressed="true">Show all</button></li>
+        </ul>
+
+        <p class="hint">
+          Sample figures in the coloured wards are stand-ins until your full RTI tables replace
+          <code>data/water_by_ward.js</code>.
+        </p>
+      </aside>
+    </main>
+
+    <section class="slum-section" id="slums" aria-labelledby="slum-heading">
+      <article class="slum-card">
+        <h2 id="slum-heading">Where PCMC's informal settlements stand</h2>
+        <p>
+          Not everyone in Pimpri-Chinchwad lives in a house with a registered address. This is PCMC's own list of 37 recognised slum settlements — where they are, how many homes they have, and who owns the land they sit on.
+        </p>
+        <p>
+          Land ownership matters here: settlements on <strong>corporation (मनपा)</strong> or <strong>government (सरकारी)</strong> land have a clearer path to services and rehabilitation. Settlements on <strong>private (बाजगी)</strong> land often don't — which affects whether they ever get piped water, drainage, or legal recognition at all.
+        </p>
+        <p class="slum-card__doc">
+          <a href="#">📄 View the original PCMC document</a>
+          <span class="slum-card__note">Please spot-check figures against the original before publishing.</span>
+        </p>
+
+        <div class="table-wrap" tabindex="0" role="region" aria-label="Recognised slum settlements">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Settlement</th>
+                <th scope="col">Ward/Area</th>
+                <th scope="col" class="num">Households</th>
+                <th scope="col" class="num">Population</th>
+                <th scope="col">Land Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>Yetalnagar</td><td>Chinchwad</td><td class="num">1,289</td><td class="num">5,456</td><td>—</td></tr>
+              <tr><td>2</td><td>Adarshnagar</td><td>Pimpri</td><td class="num">1,289</td><td class="num">5,456</td><td>Corporation</td></tr>
+              <tr><td>3</td><td>Milindnagar</td><td>Pimpri</td><td class="num">134</td><td class="num">621</td><td>Corporation</td></tr>
+              <tr><td>4</td><td>Uttamnagar</td><td>Pimpri</td><td class="num">501</td><td class="num">2,933</td><td>Corporation</td></tr>
+              <tr><td>5</td><td>Durganagar</td><td>Akurdi</td><td class="num">25</td><td class="num">75</td><td>—</td></tr>
+              <tr><td>6</td><td>Kalbhornagar</td><td>Akurdi</td><td class="num">285</td><td class="num">1,134</td><td>Authority (Pradhikaran)</td></tr>
+              <tr><td>7</td><td>Mahatma Phulenagar</td><td>Akurdi</td><td class="num">87</td><td class="num">313</td><td>MIDC</td></tr>
+              <tr><td>8</td><td>Ajanthanagar</td><td>Akurdi</td><td class="num">409</td><td class="num">2,261</td><td>MIDC</td></tr>
+              <tr><td>9</td><td>Annasaheb Nagar</td><td>Chinchwad</td><td class="num">920</td><td class="num">4,500</td><td>MIDC</td></tr>
+              <tr><td>10</td><td>Indiranagar</td><td>Chinchwad</td><td class="num">623</td><td class="num">3,606</td><td>MIDC</td></tr>
+              <tr><td>11</td><td>Landewadi</td><td>Bhosari</td><td class="num">923</td><td class="num">3,867</td><td>MIDC</td></tr>
+              <tr><td>12</td><td>Balajinagar</td><td>Bhosari</td><td class="num">1,546</td><td class="num">7,606</td><td>MIDC</td></tr>
+              <tr><td>13</td><td>Ganeshnagar</td><td>Bhosari</td><td class="num">133</td><td class="num">435</td><td>MIDC</td></tr>
+              <tr><td>14</td><td>Mahatma Phulenagar</td><td>Bhosari</td><td class="num">1,229</td><td class="num">4,168</td><td>MIDC</td></tr>
+              <tr><td>15</td><td>Gavlinagar</td><td>Bhosari</td><td class="num">650</td><td class="num">2,574</td><td>MIDC</td></tr>
+              <tr><td>16</td><td>Star River</td><td>Morwadi</td><td class="num">915</td><td class="num">3,607</td><td>MIDC</td></tr>
+              <tr><td>17</td><td>Indiranagar</td><td>Pimpri</td><td class="num">129</td><td class="num">519</td><td>Government</td></tr>
+              <tr><td>18</td><td>Kailasnagar</td><td>Pimpri</td><td class="num">292</td><td class="num">1,105</td><td>Government</td></tr>
+              <tr><td>19</td><td>Ganeshnagar</td><td>Pimpri</td><td class="num">94</td><td class="num">366</td><td>Government</td></tr>
+              <tr><td>20</td><td>Sanjay Gandhinagar</td><td>Pimpri</td><td class="num">306</td><td class="num">1,462</td><td>Government</td></tr>
+              <tr><td>21</td><td>Vitthalnagar</td><td>Nehrunagar</td><td class="num">1,369</td><td class="num">6,669</td><td>Private</td></tr>
+              <tr><td>22</td><td>Jai Malharnagar</td><td>Akurdi</td><td class="num">72</td><td class="num">264</td><td>Private</td></tr>
+              <tr><td>23</td><td>Anandnagar</td><td>Chinchwad</td><td class="num">2,262</td><td class="num">10,418</td><td>Private</td></tr>
+              <tr><td>24</td><td>Vijaynagar</td><td>Chinchwad</td><td class="num">242</td><td class="num">1,148</td><td>Private</td></tr>
+              <tr><td>25</td><td>Santoshnagar</td><td>Chinchwad</td><td class="num">46</td><td class="num">190</td><td>Private</td></tr>
+              <tr><td>26</td><td>Sudarshannagar</td><td>Chinchwad</td><td class="num">49</td><td class="num">177</td><td>Private</td></tr>
+              <tr><td>27</td><td>Mhatobanagar</td><td>Yakadi</td><td class="num">288</td><td class="num">1,470</td><td>Private</td></tr>
+              <tr><td>28</td><td>Hirawai Landgechal</td><td>Kasarwadi</td><td class="num">224</td><td class="num">1,300</td><td>Private</td></tr>
+              <tr><td>29</td><td>Ratilal Bhagwandas Chal</td><td>Phugewadi</td><td class="num">26</td><td class="num">114</td><td>Private</td></tr>
+              <tr><td>30</td><td>Gurudattanagar</td><td>Pimpri</td><td class="num">96</td><td class="num">754</td><td>Private</td></tr>
+              <tr><td>31</td><td>Vaishalinagar</td><td>Pimpri</td><td class="num">58</td><td class="num">210</td><td>Private</td></tr>
+              <tr><td>32</td><td>Ambedkarnagar</td><td>Nehrunagar</td><td class="num">85</td><td class="num">304</td><td>Private</td></tr>
+              <tr><td>33</td><td>Yashwantnagar</td><td>Nehrunagar</td><td class="num">162</td><td class="num">611</td><td>Private</td></tr>
+              <tr><td>34</td><td>Siddharthnagar</td><td>Dapodi</td><td class="num">1,124</td><td class="num">4,463</td><td>Private</td></tr>
+              <tr><td>35</td><td>M.B. Camp</td><td>Kivale</td><td class="num">643</td><td class="num">2,563</td><td>Private</td></tr>
+              <tr><td>36</td><td>Mahatma Phulenagar</td><td>Dapodi</td><td class="num">323</td><td class="num">1,154</td><td>Private</td></tr>
+              <tr><td>37</td><td>Limbre Chal</td><td>Dapodi</td><td class="num">188</td><td class="num">756</td><td>Private</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <footer class="footer">
+      <p>This is an independent citizen project. Not affiliated with PCMC.</p>
+      <p>
+        Data from RTI replies. Map from
+        <a href="https://bharatlas.com/view/wards_pcmc" rel="noopener">Bharatlas / DataMeet</a>,
+        <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a>.
+      </p>
+      <p>
+        Questions or found an error?
+        <a href="mailto:you@example.com">you@example.com</a>
+      </p>
+    </footer>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+          crossorigin=""></script>
+  <script src="data/wards_pcmc.js"></script>
+  <script src="data/water_by_ward.js"></script>
+  <script src="map.js"></script>
+</body>
+</html>
