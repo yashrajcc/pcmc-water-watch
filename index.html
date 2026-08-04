@@ -217,17 +217,64 @@
       </article>
     </section>
 
-    <footer class="footer">
-      <p>This is an independent citizen project. Not affiliated with PCMC.</p>
-      <p>
-        Data from RTI replies. Map from
-        <a href="https://bharatlas.com/view/wards_pcmc" rel="noopener">Bharatlas / DataMeet</a>,
-        <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a>.
+    <footer class="site-footer">
+      <p class="site-footer__credit">
+        Created by
+        <a href="https://work.yashraj.cc" rel="noopener" target="_blank">Yashraj Wadalkar</a>
       </p>
-      <p>
-        Questions or found an error?
-        <a href="mailto:you@example.com">you@example.com</a>
-      </p>
+
+      <div class="site-footer__split">
+        <div class="site-footer__panel">
+          <p class="site-footer__kicker">Also by the same maker</p>
+          <h2 class="site-footer__panel-title">work.yashraj.cc</h2>
+          <p class="site-footer__panel-copy">
+            A portfolio of civic, product, and design work — including open data projects like this one.
+          </p>
+          <a class="site-footer__panel-link" href="https://work.yashraj.cc" rel="noopener" target="_blank">
+            Open full site →
+          </a>
+        </div>
+        <div class="site-footer__embed" aria-label="Preview of work.yashraj.cc">
+          <iframe
+            src="https://work.yashraj.cc"
+            title="work.yashraj.cc"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+
+      <div class="site-footer__grid" role="navigation" aria-label="Project links">
+        <a class="footer-tile" href="#slums" id="rti-doc-link">
+          <span class="footer-tile__label">RTI document</span>
+          <span class="footer-tile__desc">Original PCMC disclosures &amp; scanned records behind this page.</span>
+        </a>
+        <a class="footer-tile" href="https://github.com/yashrajcc/pcmc-water-watch" rel="noopener" target="_blank">
+          <span class="footer-tile__label">GitHub repository</span>
+          <span class="footer-tile__desc">Source code, data files, issues, and how to contribute.</span>
+        </a>
+        <a class="footer-tile" href="mailto:hello@yashraj.cc?subject=PCMC%20Water%20Watch%20%E2%80%94%20register%20interest">
+          <span class="footer-tile__label">Register interest</span>
+          <span class="footer-tile__desc">Want updates when more wards go live? Drop a note.</span>
+        </a>
+        <a class="footer-tile" href="https://github.com/yashrajcc/pcmc-water-watch#work-with-us" rel="noopener" target="_blank">
+          <span class="footer-tile__label">Work with us</span>
+          <span class="footer-tile__desc">Journalists, researchers, residents — help fill the grey wards.</span>
+        </a>
+      </div>
+
+      <div class="site-footer__legal">
+        <p>This is an independent citizen project. Not affiliated with PCMC.</p>
+        <p>
+          Data from RTI replies. Map from
+          <a href="https://bharatlas.com/view/wards_pcmc" rel="noopener">Bharatlas / DataMeet</a>
+          (CC BY 4.0),
+          <a href="https://www.openstreetmap.org/copyright" rel="noopener">OpenStreetMap</a>
+          /
+          <a href="https://carto.com/attributions" rel="noopener">CARTO</a>.
+          Code under <a href="https://github.com/yashrajcc/pcmc-water-watch/blob/main/LICENSE" rel="noopener">MIT</a>.
+        </p>
+      </div>
     </footer>
   </div>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
