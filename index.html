@@ -26,31 +26,94 @@
 
     <header class="header">
       <h1>Who gets water in Pimpri-Chinchwad?</h1>
-      <p class="lede">A ward-level look at drinking-water supply, built from RTI replies.</p>
+      <p class="lede">A ward-level look at drinking-water supply, built from RTI replies — and from how much of that reply refused to resolve into data.</p>
     </header>
 
-    <section class="info-cards" id="about" aria-label="About this project">
-      <article class="info-card">
-        <h2>Why we made this</h2>
+    <section class="rti-asks" id="about" aria-label="What we asked under RTI">
+      <header class="rti-asks__head">
+        <h2>What the RTI asked — and what came back</h2>
         <p>
-          Some parts of the city get more water than others. We wanted to know why — so we asked the
-          government directly under RTI. This map shows what they told us.
+          Three formal asks. The map below only holds scraps from the first.
+          Red means we still lack a digitised, ward-joinable answer.
         </p>
-      </article>
-      <article class="info-card">
-        <h2>What the colours mean</h2>
-        <p>
-          Coloured area = we have the answer.<br />
-          Grey area = still waiting for a reply.<br />
-          Nothing is hidden — some areas just haven't answered yet.
-        </p>
-      </article>
-      <article class="info-card">
-        <h2>How to use this map</h2>
-        <p>
-          Tap or hover any coloured area to see its water hours, coverage, and where the water comes from.
-        </p>
-      </article>
+      </header>
+
+      <div class="rti-grid">
+        <article class="rti-card">
+          <div class="rti-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 6c0 0-9 11-9 17a9 9 0 0018 0c0-6-9-17-9-17z" stroke="currentColor" stroke-width="1.8" fill="rgba(11,110,122,.12)"/>
+              <path d="M16 24h8M17 28h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="rti-card__num">Ask 01</p>
+          <h3 class="rti-card__title">Ward-wise water distribution</h3>
+          <ul class="rti-card__asked">
+            <li>Supply schedules for each ward — last five years</li>
+            <li>Daily allocation in MLD, and shortfalls</li>
+            <li>Planned versus actual water supply</li>
+          </ul>
+          <div class="rti-card__got">
+            <p class="rti-card__got-label">What we have been able to gather</p>
+            <p class="rti-card__got-body">
+              No full five-year ward matrix. No clean planned vs actual MLD table.
+              At best, a few joinsable scraps (hours / informal schedule notes) —
+              enough for one coloured ward per zone on the map. Everything else is grey.
+            </p>
+          </div>
+        </article>
+
+        <article class="rti-card">
+          <div class="rti-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 28V12h6l3 6 3-6h6v16" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M8 28h24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <circle cx="28" cy="14" r="4" stroke="currentColor" stroke-width="1.6"/>
+            </svg>
+          </div>
+          <p class="rti-card__num">Ask 02</p>
+          <h3 class="rti-card__title">Non-revenue water (NRW)</h3>
+          <ul class="rti-card__asked">
+            <li>Records of leakages, theft, billing inefficiencies</li>
+            <li>Share of supply that is unaccounted for</li>
+            <li>Mitigation steps being taken</li>
+          </ul>
+          <div class="rti-card__got">
+            <p class="rti-card__got-label">What we have been able to gather</p>
+            <p class="rti-card__got-body">
+              No ward-wise NRW. No usable leakage / theft / billing split.
+              No single city % we can publish with confidence from this reply set.
+              This ask is essentially unanswered for the public map.
+            </p>
+          </div>
+        </article>
+
+        <article class="rti-card">
+          <div class="rti-card__icon" aria-hidden="true">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="6" y="10" width="12" height="20" rx="1.5" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M18 16h6v4h8v10H18" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+              <circle cx="28" cy="14" r="3" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M10 16h4M10 20h4M10 24h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="rti-card__num">Ask 03</p>
+          <h3 class="rti-card__title">Infrastructure &amp; cyber-physical systems</h3>
+          <ul class="rti-card__asked">
+            <li>Operational and defunct pipelines + last maintenance</li>
+            <li>SCADA, IoT, or AI distribution systems + audits</li>
+            <li>How far water governance is digitised — and how security is ensured</li>
+          </ul>
+          <div class="rti-card__got">
+            <p class="rti-card__got-label">What we have been able to gather</p>
+            <p class="rti-card__got-body">
+              No public GIS layer of pipes to overlay on wards. No SCADA / IoT / AI audit
+              packet we could open or link. Maintenance logs remain inside the bureau —
+              not on this page.
+            </p>
+          </div>
+        </article>
+      </div>
     </section>
 
     <main class="main">
@@ -71,7 +134,7 @@
             <div class="ward-card__hero">
               <div class="hero-metric">
                 <span class="hero-metric__value" id="card-hours">—</span>
-                <span class="hero-metric__label">hrs / day supply</span>
+                <span class="hero-metric__label">hrs / day (if stated)</span>
               </div>
               <div class="supply-track" aria-hidden="true">
                 <div class="supply-track__fill" id="card-hours-bar"></div>
@@ -81,52 +144,49 @@
 
             <dl class="metric-grid">
               <div class="metric">
-                <dt>Network coverage</dt>
-                <dd>
-                  <span id="card-coverage">—</span>
-                  <div class="meter" aria-hidden="true"><span class="meter__fill" id="card-coverage-bar"></span></div>
-                </dd>
+                <dt>Planned allocation</dt>
+                <dd id="card-planned">—</dd>
               </div>
               <div class="metric">
-                <dt>Household connections</dt>
-                <dd id="card-connections">—</dd>
+                <dt>Actual supply</dt>
+                <dd id="card-actual">—</dd>
               </div>
               <div class="metric">
-                <dt>ESR capacity</dt>
-                <dd id="card-esr">—</dd>
+                <dt>Shortfall</dt>
+                <dd id="card-shortfall">—</dd>
               </div>
               <div class="metric">
-                <dt>System pressure</dt>
-                <dd id="card-pressure">—</dd>
+                <dt>Years covered</dt>
+                <dd id="card-years">—</dd>
               </div>
             </dl>
 
             <div class="ward-card__source">
-              <p class="source-label">Primary source</p>
+              <p class="source-label">Source (as named)</p>
               <p class="source-value" id="card-source">—</p>
             </div>
 
             <p class="ward-card__notes" id="card-notes">—</p>
-            <p class="ward-card__updated">RTI / records updated <time id="card-updated">—</time></p>
+            <p class="ward-card__updated">Scrap dated <time id="card-updated">—</time></p>
           </div>
 
           <div class="ward-card__empty" id="card-empty" hidden>
-            <p class="empty-title">No published supply data yet</p>
+            <p class="empty-title">No joinable fragment yet</p>
             <p class="empty-copy">
-              This ward is still grey because the RTI tranche has not returned usable
-              provisioning figures. It will light up when that disclosure is added.
+              Grey means this ward did not appear as a clear, digitised answer in the RTI
+              materials we could use. That is the opacity — not a deliberate hide on our side.
             </p>
           </div>
         </aside>
 
-        <p class="map-idle" id="map-idle">Hover a ward — coloured ones have RTI data</p>
+        <p class="map-idle" id="map-idle">Hover a ward — colour = scrap joined · grey = still opaque</p>
       </figure>
 
       <aside class="sidebar">
         <h2>On the map</h2>
         <ul class="coverage-legend">
-          <li><span class="swatch swatch-data" aria-hidden="true"></span> Data published <span class="count" id="legend-with-data">13</span></li>
-          <li><span class="swatch swatch-nodata" aria-hidden="true"></span> Awaiting RTI <span class="count" id="legend-nodata">53</span></li>
+          <li><span class="swatch swatch-data" aria-hidden="true"></span> Fragment joined <span class="count" id="legend-with-data">6</span></li>
+          <li><span class="swatch swatch-nodata" aria-hidden="true"></span> Unresolved <span class="count" id="legend-nodata">60</span></li>
         </ul>
 
         <h2 class="sidebar__sub">Filter by zone</h2>
@@ -139,11 +199,7 @@
           <li><button type="button" class="zone-chip" data-zone="F" aria-pressed="false"><span class="swatch zone-F" aria-hidden="true"></span>Zone F<span class="count">10</span></button></li>
           <li><button type="button" class="zone-chip clear" data-zone="" aria-pressed="true">Show all</button></li>
         </ul>
-
-        <p class="hint">
-          Sample figures in the coloured wards are stand-ins until your full RTI tables replace
-          <code>data/water_by_ward.js</code>.
-        </p>
+        <p class="hint">Coloured = one joinable scrap per zone when possible. Grey = still opaque.</p>
       </aside>
     </main>
 
@@ -215,6 +271,37 @@
           </table>
         </div>
       </article>
+    </section>
+
+    <section class="collab" id="collaborate" aria-labelledby="collab-heading">
+      <div class="collab__card">
+        <div class="collab__copy">
+          <p class="collab__kicker">This map is incomplete — on purpose, honestly</p>
+          <h2 id="collab-heading">Help unspool what RTI buried in paper</h2>
+          <p class="collab__text">
+            The greys are not empty wards. They are answers we could not yet digitise, join, or trust.
+            If you have replies, can OCR Marathi annexures, map pipes, or push for fuller disclosure —
+            this project needs you.
+          </p>
+          <div class="collab__actions">
+            <a class="collab__btn collab__btn--primary" href="mailto:hello@yashraj.cc?subject=PCMC%20Water%20Watch%20%E2%80%94%20collaborate">
+              Collaborate
+            </a>
+            <a class="collab__btn collab__btn--ghost" href="https://github.com/yashrajcc/pcmc-water-watch#work-with-us" rel="noopener" target="_blank">
+              Work with us
+            </a>
+            <a class="collab__btn collab__btn--ghost" href="https://github.com/yashrajcc/pcmc-water-watch/issues" rel="noopener" target="_blank">
+              File a lead
+            </a>
+          </div>
+        </div>
+        <ul class="collab__list">
+          <li><strong>Digitise</strong> — typed schedules, not photo PDFs</li>
+          <li><strong>Join</strong> — ward numbers that match the electoral map</li>
+          <li><strong>Audit</strong> — NRW and pipe layers the city would rather keep internal</li>
+          <li><strong>Amplify</strong> — residents who still live under “no data”</li>
+        </ul>
+      </div>
     </section>
 
     <footer class="site-footer">

@@ -1,4 +1,4 @@
-/* Leaflet map + hover overlay. Grey = no RTI data yet; colour = in PCMC_WATER. */
+/* Leaflet map + hover overlay. Grey = no joinable fragment; colour = in PCMC_WATER. */
 (function () {
   const geojson = window.PCMC_WARDS;
   const waterByWard = window.PCMC_WATER || {};
@@ -21,6 +21,8 @@
   };
 
   const STATUS_LABEL = {
+    partial: "Partial scrap",
+    opaque: "Opaque scrap",
     adequate: "Adequate",
     stressed: "Stressed",
     deficit: "Deficit",
@@ -30,12 +32,8 @@
   const withData = meta.withData || Object.keys(waterByWard).length;
   const noData = totalWards - withData;
 
-  const statWith = document.getElementById("stat-with-data");
-  const statTotal = document.getElementById("stat-total");
   const legendWith = document.getElementById("legend-with-data");
   const legendNo = document.getElementById("legend-nodata");
-  if (statWith) statWith.textContent = String(withData);
-  if (statTotal) statTotal.textContent = String(totalWards);
   if (legendWith) legendWith.textContent = String(withData);
   if (legendNo) legendNo.textContent = String(noData);
 
@@ -49,11 +47,10 @@
     hours: document.getElementById("card-hours"),
     hoursBar: document.getElementById("card-hours-bar"),
     schedule: document.getElementById("card-schedule"),
-    coverage: document.getElementById("card-coverage"),
-    coverageBar: document.getElementById("card-coverage-bar"),
-    connections: document.getElementById("card-connections"),
-    esr: document.getElementById("card-esr"),
-    pressure: document.getElementById("card-pressure"),
+    planned: document.getElementById("card-planned"),
+    actual: document.getElementById("card-actual"),
+    shortfall: document.getElementById("card-shortfall"),
+    years: document.getElementById("card-years"),
     source: document.getElementById("card-source"),
     notes: document.getElementById("card-notes"),
     updated: document.getElementById("card-updated"),
@@ -61,6 +58,15 @@
 
   function hasData(wardKey) {
     return Object.prototype.hasOwnProperty.call(waterByWard, String(wardKey));
+  }
+
+  function missing(text) {
+    return '<span class="field-missing">' + text + "</span>";
+  }
+
+  function textOrMissing(value, fallback) {
+    if (value == null || value === "") return missing(fallback || "Not disclosed");
+    return value;
   }
 
   const map = L.map("map", {
@@ -100,14 +106,10 @@
     };
   }
 
-  function formatNumber(n) {
-    return Number(n).toLocaleString("en-IN");
-  }
-
   function showEmptyCard(wardKey, zone) {
     els.eyebrow.textContent = "Zone " + zone;
     els.title.textContent = "Ward " + wardKey;
-    els.locality.textContent = "Awaiting RTI disclosure";
+    els.locality.textContent = "No joinable fragment";
     els.status.textContent = "No data";
     els.status.dataset.status = "nodata";
     if (cardBody) cardBody.hidden = true;
@@ -117,26 +119,49 @@
     if (idle) idle.hidden = true;
   }
 
+  function setHtml(el, html) {
+    if (!el) return;
+    el.innerHTML = html;
+  }
+
   function showDataCard(d, zoneFallback) {
-    const status = d.status || "adequate";
-    const hours = Number(d.supplyHoursPerDay) || 0;
-    const coverage = Number(d.coveragePct) || 0;
-    const hoursPct = Math.max(0, Math.min(100, (hours / 6) * 100));
+    const status = d.status || "partial";
+    const hours = d.supplyHoursPerDay;
+    const hasHours = hours != null && hours !== "" && !Number.isNaN(Number(hours));
+    const hoursNum = hasHours ? Number(hours) : 0;
+    const hoursPct = hasHours ? Math.max(0, Math.min(100, (hoursNum / 6) * 100)) : 0;
 
     els.eyebrow.textContent = "Zone " + (d.zone || zoneFallback);
     els.title.textContent = "Ward " + d.wardnum;
     els.locality.textContent = d.locality || "—";
     els.status.textContent = STATUS_LABEL[status] || status;
     els.status.dataset.status = status;
-    els.hours.textContent = hours.toFixed(1);
+
+    if (hasHours) {
+      els.hours.textContent = hoursNum.toFixed(1);
+      els.hours.classList.remove("field-missing");
+    } else {
+      els.hours.innerHTML = missing("—");
+    }
     els.hoursBar.style.width = hoursPct + "%";
-    els.schedule.textContent = d.schedule || "—";
-    els.coverage.textContent = coverage + "%";
-    els.coverageBar.style.width = Math.max(0, Math.min(100, coverage)) + "%";
-    els.connections.textContent = formatNumber(d.householdConnections) + " hh";
-    els.esr.textContent = (d.esrCapacityMld != null ? d.esrCapacityMld : "—") + " MLD";
-    els.pressure.textContent = d.pressure || "—";
-    els.source.textContent = d.source || "—";
+    els.hoursBar.style.opacity = hasHours ? "1" : "0.25";
+
+    setHtml(els.schedule, textOrMissing(d.schedule, "Schedule not disclosed"));
+    setHtml(
+      els.planned,
+      d.allocationPlannedMld != null
+        ? d.allocationPlannedMld + " MLD"
+        : missing("Not disclosed")
+    );
+    setHtml(
+      els.actual,
+      d.allocationActualMld != null
+        ? d.allocationActualMld + " MLD"
+        : missing("Not disclosed")
+    );
+    setHtml(els.shortfall, textOrMissing(d.shortfall, "Not disclosed"));
+    setHtml(els.years, textOrMissing(d.yearsCovered, "Not disclosed"));
+    setHtml(els.source, textOrMissing(d.source, "Not named"));
     els.notes.textContent = d.notes || "";
     els.updated.textContent = d.lastUpdated || "—";
     els.updated.setAttribute("datetime", d.lastUpdated || "");
@@ -160,6 +185,17 @@
     card.hidden = true;
     if (idle) idle.hidden = false;
   }
+
+  // Verify every data key exists in the GeoJSON
+  const geoWardIds = {};
+  geojson.features.forEach(function (f) {
+    geoWardIds[String(f.properties.wardnum)] = true;
+  });
+  Object.keys(waterByWard).forEach(function (id) {
+    if (!geoWardIds[id]) {
+      console.warn("[PCMC Water] water data key not in map GeoJSON:", id);
+    }
+  });
 
   const layer = L.geoJSON(geojson, {
     style: wardStyle,
