@@ -81,6 +81,30 @@ body {
   color: var(--line);
 }
 
+.nav__visitors {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--muted) !important;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.nav__visitors:hover {
+  border-color: var(--accent);
+  color: var(--accent) !important;
+}
+
+#visitor-count {
+  color: var(--ink);
+  font-weight: 700;
+}
+
 .header {
   max-width: 40rem;
   margin-bottom: 1.75rem;

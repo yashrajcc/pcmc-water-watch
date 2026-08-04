@@ -21,6 +21,18 @@
         <a href="#about">About</a>
         <span class="nav__dot" aria-hidden="true">·</span>
         <a href="https://rtionline.gov.in/" rel="noopener" target="_blank">File your own RTI</a>
+        <span class="nav__dot" aria-hidden="true">·</span>
+        <a
+          class="nav__visitors"
+          id="visitor-count-wrap"
+          href="https://pcmc-water.goatcounter.com"
+          rel="noopener"
+          target="_blank"
+          title="Open GoatCounter stats"
+          hidden
+        >
+          Visitors <span id="visitor-count">—</span>
+        </a>
       </div>
     </nav>
 
@@ -381,6 +393,9 @@
               <a href="https://carto.com/attributions" rel="noopener">CARTO</a>
               · Code
               <a href="https://github.com/yashrajcc/pcmc-water-watch/blob/main/LICENSE" rel="noopener">MIT</a>
+              · Traffic via
+              <a href="https://pcmc-water.goatcounter.com" rel="noopener">GoatCounter</a>
+              (privacy-friendly, no ads)
             </p>
           </div>
         </div>
@@ -392,6 +407,12 @@
           crossorigin=""></script>
   <script src="data/wards_pcmc.js"></script>
   <script src="data/water_by_ward.js"></script>
+  <script src="analytics.js"></script>
   <script src="map.js"></script>
+  <script
+    data-goatcounter="https://pcmc-water.goatcounter.com/count"
+    async
+    src="//gc.zgo.at/count.js"
+  ></script>
 </body>
 </html>

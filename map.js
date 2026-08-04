@@ -207,6 +207,9 @@
       lyr.on({
         mouseover: function (e) {
           showCard(ward, zone);
+          if (typeof window.pcmcTrackWard === "function") {
+            window.pcmcTrackWard(ward, known);
+          }
           if (known) {
             e.target.setStyle({
               weight: 2.2,
